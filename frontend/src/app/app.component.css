@@ -1,0 +1,39 @@
+.brand-dot{
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.9);
+    box-shadow: 0 0 0 4px rgba(255,255,255,.15);
+}
+
+.navbar .nav-link{
+    border-radius: 10px;
+    font-weight: 500;
+    opacity: .95;
+}
+
+.navbar .nav-link.active{
+    background: rgba(255,255,255,.16);
+}
+
+.brand-dot{
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #00c853; /* verde institucional */
+    position: relative;
+    animation: pulse-green 1.8s infinite;
+}
+
+/* animação de pulso */
+@keyframes pulse-green {
+    0% {
+        box-shadow: 0 0 0 0 rgba(0, 200, 83, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 8px rgba(0, 200, 83, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(0, 200, 83, 0);
+    }
+}

@@ -1,0 +1,15 @@
+<div class="d-flex align-items-center justify-content-between mb-3">
+  <h2>Relatório</h2>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <p>Relatório PDF agrupado por autor (dados vindos da VIEW <code>vw_rel_livros_por_autor</code>).</p>
+    <button class="btn btn-dark" (click)="abrir()">Abrir PDF</button>
+
+    <hr class="my-3"/>
+
+    <p class="text-muted mb-2">Se preferir, aqui vai um preview embutido:</p>
+    <iframe [src]="pdfUrl" width="100%" height="600" style="border:1px solid #ddd;border-radius:8px;"></iframe>
+  </div>
+</div>

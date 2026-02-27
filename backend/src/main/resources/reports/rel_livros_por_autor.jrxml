@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.21.5.final using JasperReports Library version 6.21.5-74d586df47b25dbd05bd0957999819196e59934a  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rel_livros_por_autor" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8458757a-b6cb-401e-9fa1-d6bf30aff076">
+	<field name="titulo" class="java.lang.String"/>
+	<field name="editora" class="java.lang.String"/>
+	<field name="edicao" class="java.lang.Integer"/>
+	<field name="anopublicacao" class="java.lang.String"/>
+	<field name="valor" class="java.math.BigDecimal"/>
+	<field name="autores" class="java.lang.String"/>
+	<field name="assuntos" class="java.lang.String"/>
+	<title>
+		<band height="54">
+			<staticText>
+				<reportElement x="-2" y="25" width="555" height="25" uuid="6cf2592e-c712-4741-bf49-7e88e1439b74"/>
+				<textElement textAlignment="Center">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Relatório de Livros]]></text>
+			</staticText>
+			<image>
+				<reportElement x="-20" y="-20" width="595" height="50" uuid="55f38951-f1f1-4a73-a722-f16fcf4fc7b2"/>
+				<imageExpression><![CDATA["/Users/douglassouza/Downloads/Screenshot at Feb 26 21-42-31.png"]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="25">
+			<staticText>
+				<reportElement x="0" y="5" width="120" height="20" uuid="6eee139d-da33-4f42-a51c-d19a0100e434"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Título]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="120" y="5" width="80" height="20" uuid="b76d4252-aefb-4143-9ddb-67babd8532cd"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Editora]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="5" width="50" height="20" uuid="bd90d7c5-502d-48e4-aa7a-5e4c460f92dd"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Edição]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="250" y="5" width="50" height="20" uuid="61d8683d-d42b-4251-abe2-63ec265fdde6"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ano]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="5" width="100" height="20" uuid="9569dbb6-05b1-4742-8cdc-800d975e2465"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Autor(es)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="400" y="5" width="75" height="20" uuid="99583936-50c3-448a-8a38-53c104151023"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Assunto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="475" y="5" width="80" height="20" uuid="83103012-2ffe-4665-bfae-15327c36779b"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Valor]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField>
+				<reportElement x="0" y="0" width="120" height="20" uuid="e9853645-fdfe-44a2-a64d-9d5e99aa3c6c"/>
+				<textFieldExpression><![CDATA[$F{titulo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="120" y="0" width="80" height="20" uuid="baa5a5e3-0751-4566-955e-d91beb6bd4ed"/>
+				<textFieldExpression><![CDATA[$F{editora}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="50" height="20" uuid="b5246e88-1838-4dfc-a1b6-857cfd927e42"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{edicao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="250" y="0" width="50" height="20" uuid="307e0bbc-887d-4b7e-8f4e-ab5dfee62124"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{anopublicacao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="300" y="0" width="100" height="20" uuid="65bd0941-d019-468a-a177-c1729bbc940c"/>
+				<textFieldExpression><![CDATA[$F{autores}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="400" y="0" width="75" height="20" uuid="db5b4842-68c7-4248-84e6-de70992c1b65"/>
+				<textFieldExpression><![CDATA[$F{assuntos}]]></textFieldExpression>
+			</textField>
+			<textField pattern="R$ #,##0.00">
+				<reportElement x="475" y="0" width="80" height="20" uuid="65652cd5-f7f8-4a71-9eca-32f0e176f530"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band height="40">
+			<line>
+				<reportElement x="0" y="5" width="555" height="1" uuid="455539c2-7d5c-4aa6-b417-589ede32d9e8"/>
+			</line>
+		</band>
+	</summary>
+</jasperReport>

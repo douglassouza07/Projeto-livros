@@ -1,0 +1,19 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary-custom shadow-sm">
+    <div class="container container-page">
+        <a class="navbar-brand d-flex align-items-center gap-2" routerLink="/">
+            <span class="brand-dot"></span>
+            <span class="fw-bold">Sistema de Livros</span>
+        </a>
+
+        <div class="navbar-nav ms-auto gap-1">
+            <a class="nav-link px-3" routerLink="/livros" routerLinkActive="active">Livros</a>
+            <a class="nav-link px-3" routerLink="/autores" routerLinkActive="active">Autores</a>
+            <a class="nav-link px-3" routerLink="/assuntos" routerLinkActive="active">Assuntos</a>
+            <a class="nav-link px-3" routerLink="/relatorio" routerLinkActive="active">Relatório</a>
+        </div>
+    </div>
+</nav>
+
+<main class="container container-page py-4">
+    <router-outlet></router-outlet>
+</main>

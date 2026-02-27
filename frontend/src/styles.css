@@ -1,0 +1,62 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+@import "@ng-select/ng-select/themes/default.theme.css";
+
+:root{
+    --azul-principal: #0d47a1;
+    --azul-medio: #1565c0;
+    --azul-claro: #e3f2fd;
+}
+
+/* Layout */
+body{
+    background: #f5f7fb;
+    color: #1f2937;
+}
+
+.container-page{
+    max-width: 1100px;
+}
+
+/* Navbar */
+.bg-primary-custom{
+    background: var(--azul-principal) !important;
+}
+
+/* Badge soft */
+.bg-soft-primary{
+    background: rgba(13,71,161,.10) !important;
+}
+
+/* Cards */
+.card{
+    border-radius: 14px;
+}
+
+.shadow-sm{
+    box-shadow: 0 8px 24px rgba(16,24,40,.08) !important;
+}
+
+/* Botões */
+.btn{
+    border-radius: 12px;
+}
+
+.btn-primary{
+    background: var(--azul-principal);
+    border: none;
+}
+
+.btn-primary:hover{
+    background: var(--azul-medio);
+}
+
+/* Tabelas */
+.table thead{
+    background: var(--azul-principal);
+    color: #fff;
+}
+
+.table tbody tr:hover{
+    background: rgba(13,71,161,.04);
+}
