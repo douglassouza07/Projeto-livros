@@ -10,7 +10,7 @@ import { API } from '../../services/api';
   styleUrl: './relatorio.component.css'
 })
 export class RelatorioComponent {
-  pdfUrl = `${API}/relatorios/livros-por-autor.pdf`;
+  pdfUrl = `${API}/relatorios/livros-por-autor`;
 
   abrir(): void {
     window.open(this.pdfUrl, '_blank');
