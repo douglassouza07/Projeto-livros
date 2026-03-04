@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AutorService } from '../../services/autor.service';
 import { Autor } from '../../models/autor';
+import { ToastService } from '../../core/toast/toast.service';
 
 @Component({
   selector: 'app-autores',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './autores.component.html',
   styleUrl: './autores.component.css'
 })
@@ -18,22 +19,27 @@ export class AutoresComponent implements OnInit {
   editingId: number | null = null;
   error: string | null = null;
 
-  form = this.fb.group({
+  pageSize = 10;
+  page = 1;
+  searchTerm = '';
+
+  form = this.fb.nonNullable.group({
     nome: ['', [Validators.required, Validators.maxLength(40)]]
   });
 
-  constructor(private fb: FormBuilder, private service: AutorService) {}
+  constructor(private fb: FormBuilder, private service: AutorService, private toast: ToastService) {}
 
-  ngOnInit(): void {
-    this.load();
-  }
+  ngOnInit(): void { this.load(); }
 
   load(): void {
     this.loading = true;
     this.error = null;
-    this.service.list().subscribe({
-      next: (data) => this.autores = data,
-      error: () => this.error = 'Falha ao carregar autores.',
+    this.service.search('').subscribe({
+      next: (data) => {
+        this.autores = data;
+        this.page = 1;
+      },
+      error: () => this.toast.error('Falha ao carregar autores.'),
       complete: () => this.loading = false
     });
   }
@@ -51,9 +57,10 @@ export class AutoresComponent implements OnInit {
   save(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.toast.warning('Preencha o nome.');
       return;
     }
-    const nome = this.form.value.nome!.trim();
+    const nome = this.form.getRawValue().nome.trim();
 
     this.loading = true;
     this.error = null;
@@ -63,10 +70,15 @@ export class AutoresComponent implements OnInit {
       : this.service.create(nome);
 
     req$.subscribe({
-      next: () => { this.cancel(); this.load(); },
-      error: () => this.error = 'Falha ao salvar autor.',
+      next: () => {
+        this.service.clearCache();
+        this.toast.success(this.editingId ? 'Autor atualizado.' : 'Autor criado.');
+        this.cancel();
+        this.load();
+      },
       complete: () => this.loading = false
     });
+    this.loading = false
   }
 
   remove(a: Autor): void {
@@ -74,9 +86,32 @@ export class AutoresComponent implements OnInit {
     this.loading = true;
     this.error = null;
     this.service.delete(a.id).subscribe({
-      next: () => this.load(),
-      error: () => this.error = 'Falha ao remover autor (pode estar vinculado a livro).',
+      next: () => {
+        this.service.clearCache();
+        this.toast.success('Autor removido.');
+        this.load();
+      },
       complete: () => this.loading = false
     });
+    this.loading = false
+  }
+
+  get filteredAutores(): Autor[] {
+    const term = (this.searchTerm || '').trim().toLowerCase();
+    if (!term) return this.autores;
+    return this.autores.filter(a => (a.nome || '').toLowerCase().includes(term));
+  }
+
+  get totalPages(): number {
+    return Math.max(1, Math.ceil(this.filteredAutores.length / this.pageSize));
+  }
+
+  get pagedAutores(): Autor[] {
+    const start = (this.page - 1) * this.pageSize;
+    return this.filteredAutores.slice(start, start + this.pageSize);
+  }
+
+  goToPage(p: number): void {
+    this.page = Math.min(Math.max(1, p), this.totalPages);
   }
 }

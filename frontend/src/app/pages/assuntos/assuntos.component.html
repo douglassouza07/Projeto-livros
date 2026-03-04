@@ -1,12 +1,16 @@
 <div class="d-flex align-items-center justify-content-between mb-3">
-  <h2>Assuntos</h2>
+  <div>
+    <h2 class="mb-0">Assuntos</h2>
+  </div>
 </div>
-
-<div class="alert alert-danger" *ngIf="error">{{error}}</div>
 
 <div class="card mb-3">
   <div class="card-body">
-    <h5 class="card-title">{{ editingId ? 'Editar Assunto' : 'Novo Assunto' }}</h5>
+
+      <div class="d-flex align-items-center justify-content-between">
+          <h5 class="card-title">{{ editingId ? 'Editar Assunto' : 'Novo Assunto' }}</h5>
+          <span class="badge btn-primary" *ngIf="editingId">Editando #{{editingId}}</span>
+      </div>
 
     <form [formGroup]="form" (ngSubmit)="save()" class="row g-2 align-items-end">
       <div class="col-md-6">
@@ -31,9 +35,19 @@
 
 <div class="card">
   <div class="card-body">
-    <div class="d-flex justify-content-between">
-      <h5 class="card-title mb-3">Lista</h5>
-      <span *ngIf="loading" class="text-muted">carregando...</span>
+    <div class="d-flex flex-column flex-md-row gap-2 align-items-md-center justify-content-between mb-3">
+      <h5 class="card-title mb-0">Lista</h5>
+      <div class="d-flex gap-2">
+        <div class="input-group">
+          <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+          <input class="form-control" placeholder="Buscar assunto" [(ngModel)]="searchTerm" (ngModelChange)="goToPage(1)" />
+        </div>
+        <select class="form-select" style="width: 130px" [(ngModel)]="pageSize" (ngModelChange)="goToPage(1)">
+          <option [ngValue]="5">5</option>
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="20">20</option>
+        </select>
+      </div>
     </div>
 
     <table class="table table-sm table-hover align-middle">
@@ -45,7 +59,16 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let a of assuntos">
+        <tr *ngIf="loading">
+          <td colspan="3">
+            <div class="d-flex flex-column gap-2">
+              <div class="skeleton" style="height: 14px; width: 100%;"></div>
+              <div class="skeleton" style="height: 14px; width: 85%;"></div>
+            </div>
+          </td>
+        </tr>
+
+        <tr *ngFor="let a of pagedAssuntos">
           <td>{{a.id}}</td>
           <td>{{a.descricao}}</td>
           <td class="text-end">
@@ -53,7 +76,28 @@
             <button class="btn btn-sm btn-outline-danger" (click)="remove(a)">Remover</button>
           </td>
         </tr>
+
+        <tr *ngIf="!loading && pagedAssuntos.length === 0">
+          <td colspan="3" class="text-center text-muted py-4">Nenhum assunto encontrado.</td>
+        </tr>
       </tbody>
     </table>
+
+    <div class="d-flex align-items-center justify-content-between" *ngIf="!loading">
+      <div class="text-muted small">{{ filteredAssuntos.length }} registro(s) • Página {{ page }} / {{ totalPages }}</div>
+      <nav aria-label="Paginação">
+        <ul class="pagination pagination-sm mb-0">
+          <li class="page-item" [class.disabled]="page <= 1">
+            <button class="page-link" type="button" (click)="goToPage(page-1)">Anterior</button>
+          </li>
+          <li class="page-item" *ngFor="let p of [1,2,3,4,5]" [class.d-none]="p > totalPages" [class.active]="p===page">
+            <button class="page-link" type="button" (click)="goToPage(p)">{{p}}</button>
+          </li>
+          <li class="page-item" [class.disabled]="page >= totalPages">
+            <button class="page-link" type="button" (click)="goToPage(page+1)">Próxima</button>
+          </li>
+        </ul>
+      </nav>
+    </div>
   </div>
 </div>

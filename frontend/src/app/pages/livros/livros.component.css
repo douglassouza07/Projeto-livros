@@ -1,1 +1,22 @@
 h2{font-size:24px;}
+
+.autocomplete ::ng-deep .ng-select-container{
+  min-height: 42px;
+  border-radius: 12px;
+  border-color: rgba(15,23,42,.12);
+}
+
+.autocomplete ::ng-deep .ng-select.ng-select-focused .ng-select-container{
+  border-color: rgba(31,111,235,.45);
+  box-shadow: 0 0 0 .25rem rgba(31,111,235,.15);
+}
+
+.autocomplete ::ng-deep .ng-dropdown-panel{
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 14px 40px rgba(16,24,40,.12);
+}
+
+.pagination .page-link{
+  border-radius: 10px;
+}

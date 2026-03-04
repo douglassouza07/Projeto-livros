@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AssuntoService } from '../../services/assunto.service';
 import { Assunto } from '../../models/assunto';
+import { ToastService } from '../../core/toast/toast.service';
 
 @Component({
   selector: 'app-assuntos',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './assuntos.component.html',
   styleUrl: './assuntos.component.css'
 })
@@ -18,11 +19,15 @@ export class AssuntosComponent implements OnInit {
   editingId: number | null = null;
   error: string | null = null;
 
-  form = this.fb.group({
+  pageSize = 10;
+  page = 1;
+  searchTerm = '';
+
+  form = this.fb.nonNullable.group({
     descricao: ['', [Validators.required, Validators.maxLength(20)]]
   });
 
-  constructor(private fb: FormBuilder, private service: AssuntoService) {}
+  constructor(private fb: FormBuilder, private service: AssuntoService, private toast: ToastService) {}
 
   ngOnInit(): void {
     this.load();
@@ -31,9 +36,12 @@ export class AssuntosComponent implements OnInit {
   load(): void {
     this.loading = true;
     this.error = null;
-    this.service.list().subscribe({
-      next: (data) => this.assuntos = data,
-      error: () => this.error = 'Falha ao carregar assuntos.',
+    this.service.search('').subscribe({
+      next: (data) => {
+        this.assuntos = data;
+        this.page = 1;
+      },
+      error: () => this.toast.error('Falha ao carregar assuntos.'),
       complete: () => this.loading = false
     });
   }
@@ -51,9 +59,10 @@ export class AssuntosComponent implements OnInit {
   save(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.toast.warning('Preencha a descrição.');
       return;
     }
-    const descricao = this.form.value.descricao!.trim();
+    const descricao = this.form.getRawValue().descricao.trim();
 
     this.loading = true;
     this.error = null;
@@ -63,10 +72,15 @@ export class AssuntosComponent implements OnInit {
       : this.service.create(descricao);
 
     req$.subscribe({
-      next: () => { this.cancel(); this.load(); },
-      error: () => this.error = 'Falha ao salvar assunto.',
+      next: () => {
+        this.service.clearCache();
+        this.toast.success(this.editingId ? 'Assunto atualizado.' : 'Assunto criado.');
+        this.cancel();
+        this.load();
+      },
       complete: () => this.loading = false
     });
+    this.loading = false
   }
 
   remove(a: Assunto): void {
@@ -74,9 +88,32 @@ export class AssuntosComponent implements OnInit {
     this.loading = true;
     this.error = null;
     this.service.delete(a.id).subscribe({
-      next: () => this.load(),
-      error: () => this.error = 'Falha ao remover assunto (pode estar vinculado a livro).',
+      next: () => {
+        this.service.clearCache();
+        this.toast.success('Assunto removido.');
+        this.load();
+      },
       complete: () => this.loading = false
     });
+    this.loading = false
+  }
+
+  get filteredAssuntos(): Assunto[] {
+    const term = (this.searchTerm || '').trim().toLowerCase();
+    if (!term) return this.assuntos;
+    return this.assuntos.filter(a => (a.descricao || '').toLowerCase().includes(term));
+  }
+
+  get totalPages(): number {
+    return Math.max(1, Math.ceil(this.filteredAssuntos.length / this.pageSize));
+  }
+
+  get pagedAssuntos(): Assunto[] {
+    const start = (this.page - 1) * this.pageSize;
+    return this.filteredAssuntos.slice(start, start + this.pageSize);
+  }
+
+  goToPage(p: number): void {
+    this.page = Math.min(Math.max(1, p), this.totalPages);
   }
 }
